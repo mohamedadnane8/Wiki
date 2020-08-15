@@ -50,9 +50,10 @@ def search(title):
     _, filenames = default_storage.listdir("entries")
     for filename in filenames:
         if filename.endswith(".md"):
-            if title.lower() == filename.lower():
+            entryName = re.sub(r"\.md$", "", filename)
+            if title.lower() == entryName.lower():
                 return (True, filename)
-            if title in filename:
-                suggestions.append(re.sub(r"\.md$", "", filename))
+            if title.lower() in entryName.lower():
+                suggestions.append(entryName)
 
     return (False, suggestions)

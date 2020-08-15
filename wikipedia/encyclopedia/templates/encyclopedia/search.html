@@ -6,10 +6,14 @@
 
 {% block body %}
     <h1>Resutls</h1>
-    <h3>all the results that have {{ keyWord }}</h3>
+    <p style="font-size: 20px;">all the results that have <span style="color: blue;">{{ keyWord }}</span> <p>
+    <hr>
+
     <ul>
         {% for entry in entries %}
             <li><a href="./{{entry}}">{{ entry }}</a></li>
+            {% empty %}
+            <h3>There are no results!</h3>
         {% endfor %}
     </ul>
 

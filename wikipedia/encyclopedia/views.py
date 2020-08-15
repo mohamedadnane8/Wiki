@@ -5,7 +5,7 @@ from . import util
 from django import forms
 
 
-class NewSearchForm(forms.Form):
+class SearchForm(forms.Form):
     search = forms.CharField(label="")
 
 
@@ -13,7 +13,7 @@ def index(request):
     return render(
         request,
         "encyclopedia/index.html",
-        {"entries": util.list_entries(), "form": NewSearchForm()},
+        {"entries": util.list_entries(), "form": SearchForm()},
     )
 
 
@@ -23,11 +23,11 @@ def entryPage(request, title):
         return render(
             request,
             "encyclopedia/entryPage.html",
-            {"entry": entry, "title": title, "form": NewSearchForm()},
+            {"entry": entry, "title": title, "form": SearchForm()},
         )
     else:
         # TODO : have to fix  this later
-        return render(request, "encyclopedia/404.html", {"form": NewSearchForm()})
+        return render(request, "encyclopedia/404.html", {"form": SearchForm()})
 
 
 def search(request):
@@ -35,7 +35,7 @@ def search(request):
     # Check if method is POST
     if request.method == "POST":
         # Take in the data the user submitted and save it as form
-        form = NewSearchForm(request.POST)
+        form = SearchForm(request.POST)
 
         # Check if form data is valid (server-side)
         if form.is_valid():
@@ -44,16 +44,24 @@ def search(request):
             keyWord = form.cleaned_data["search"]
             # Redirect user to list of tasks
             # Search How to redirect!
-            return render(
-                request,
-                "encyclopedia/search.html",
-                {
-                    "entries": util.search(keyWord),
-                    "form": NewSearchForm(),
-                    "keyWord": keyWord,
-                },
-            )
-
+            is_entry, ans = util.search(keyWord)
+            print(is_entry)
+            if is_entry:
+                return render(
+                    request,
+                    "encyclopedia/entryPage.html",
+                    {
+                        "form": SearchForm(),
+                        "title": keyWord,
+                        "entry": util.get_entry(keyWord),
+                    },
+                )
+            else:
+                return render(
+                    request,
+                    "encyclopedia/search.html",
+                    {"entries": ans, "form": SearchForm(), "keyWord": keyWord},
+                )
         else:
             # If the form is invalid, re-render the page with existing information.
             return index(request)
