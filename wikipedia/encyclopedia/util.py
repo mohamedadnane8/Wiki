@@ -45,15 +45,38 @@ def get_entry(title):
 def search(title):
     """
     get list of all encyclopedia entries that have the query as a substring.
+    or returns the name of the file
     """
     suggestions = list()
+    # I don't need the directory
     _, filenames = default_storage.listdir("entries")
     for filename in filenames:
         if filename.endswith(".md"):
-            entryName = re.sub(r"\.md$", "", filename)
-            if title.lower() == entryName.lower():
+            # extract the .md from the entry if any.
+            filename = re.sub(r"\.md$", "", filename)
+            if title.lower() == filename.lower():
+                # file found
                 return (True, filename)
-            if title.lower() in entryName.lower():
-                suggestions.append(entryName)
-
+            if title.lower() in filename.lower():
+                suggestions.append(filename)
+    # it returns false and list of suggestions in case we could  not find the right file
     return (False, suggestions)
+
+
+def is_exist(title):
+    _, filenames = default_storage.listdir("entries")
+    for filename in filenames:
+        if filename.endswith(".md"):
+            filename = re.sub(r"\.md$", "", filename)
+            if filename == title:
+                return True
+    return False
+
+
+def save(title, text):
+    try:
+        f = default_storage.open(f"entries/{title}.md", "w")
+        print(text)
+        f.write(str(text.encode("utf-8")))
+    except FileNotFoundError:
+        pass

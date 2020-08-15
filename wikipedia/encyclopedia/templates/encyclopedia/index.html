@@ -6,10 +6,10 @@
 
 {% block body %}
     <h1>All Pages</h1>
-
+    <hr>
     <ul>
         {% for entry in entries %}
-            <li><a href="./{{entry}}">{{ entry }}</a></li>
+            <li><a href="{% url 'encyclopedia:entry' title=entry%}">{{ entry }}</a></li>
         {% empty %}
           Sorry, There are no entries!
         {% endfor %}
