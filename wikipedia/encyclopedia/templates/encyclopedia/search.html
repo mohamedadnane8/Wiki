@@ -1,19 +1,16 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Encyclopedia
+    Search
 {% endblock %}
 
 {% block body %}
-    <h1>All Pages</h1>
-
+    <h1>Resutls</h1>
+    <h3>all the results that have {{ keyWord }}</h3>
     <ul>
         {% for entry in entries %}
             <li><a href="./{{entry}}">{{ entry }}</a></li>
-        {% empty %}
-          Sorry, There are no entries!
         {% endfor %}
-
     </ul>
 
 {% endblock %}

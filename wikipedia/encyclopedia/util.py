@@ -9,8 +9,13 @@ def list_entries():
     Returns a list of all names of encyclopedia entries.
     """
     _, filenames = default_storage.listdir("entries")
-    return list(sorted(re.sub(r"\.md$", "", filename)
-                for filename in filenames if filename.endswith(".md")))
+    return list(
+        sorted(
+            re.sub(r"\.md$", "", filename)
+            for filename in filenames
+            if filename.endswith(".md")
+        )
+    )
 
 
 def save_entry(title, content):
@@ -35,3 +40,19 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+
+
+def search(title):
+    """
+    get list of all encyclopedia entries that have the query as a substring.
+    """
+    suggestions = list()
+    _, filenames = default_storage.listdir("entries")
+    for filename in filenames:
+        if filename.endswith(".md"):
+            if title.lower() == filename.lower():
+                return (True, filename)
+            if title in filename:
+                suggestions.append(re.sub(r"\.md$", "", filename))
+
+    return (False, suggestions)
