@@ -74,9 +74,6 @@ def is_exist(title):
 
 
 def save(title, text):
-    try:
-        f = default_storage.open(f"entries/{title}.md", "w")
-        print(text)
-        f.write(str(text.encode("utf-8")))
-    except FileNotFoundError:
-        pass
+    # This can be used  for saving and
+    f = default_storage.open(f"entries/{title}.md", "wb")
+    f.write(text.encode("utf-8"))

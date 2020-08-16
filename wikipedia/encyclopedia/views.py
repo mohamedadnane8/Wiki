@@ -69,9 +69,26 @@ def create(request):
                     request, "encyclopedia/404.html", {"form": entryForms.SearchForm()}
                 )
             util.save(title, content)
-            redirect("encyclopedia:entry", title=title)
+            return redirect("encyclopedia:entry", title=title)
     return render(
         request,
         "encyclopedia/create.html",
         {"form": entryForms.SearchForm(), "createform": entryForms.CreateForm()},
     )
+
+
+def edit(request, title):
+    if request.method == "post":
+        pass
+    entry = util.get_entry(title)
+    if title:
+        return render(
+            request,
+            "encyclopedia/edit.html",
+            {
+                "form": entryForms.SearchForm(),
+                "createform": entryForms.CreateForm(),
+                "title": title,
+                "entry": entry,
+            },
+        )

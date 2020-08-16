@@ -8,5 +8,6 @@
     <h1> {{ title }}</h1>
 
     <p>{{entry}}</p>
-
+    <!-- I need  to add a get a tag! -->
+    <a href="{% url 'encyclopedia:edit' title=title%}">edit</a>
 {% endblock %}

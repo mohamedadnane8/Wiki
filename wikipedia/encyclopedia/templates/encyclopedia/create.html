@@ -1,0 +1,20 @@
+{% extends "encyclopedia/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+{% block style %}
+<link href="{% static 'encyclopedia/createStyle.css' %}" rel="stylesheet">
+
+{% endblock %}
+{% block body %}
+    <h2>Create a new page:</h2>
+    <hr>
+      <form action="{% url 'encyclopedia:create' %}" method="post"  class="container">
+          {% csrf_token %}
+          {{ createform }}
+          <input type="submit">
+      </form>
+
+{% endblock %}
