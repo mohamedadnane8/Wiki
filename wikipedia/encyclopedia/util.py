@@ -2,6 +2,7 @@ import re
 import os
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+import random, markdown2
 
 
 def list_entries():
@@ -37,9 +38,13 @@ def get_entry(title):
     """
     try:
         f = default_storage.open(f"entries/{title}.md")
-        return f.read().decode("utf-8")
+        return markdown2.markdown(f.read().decode("utf-8"))
     except FileNotFoundError:
         return None
+
+
+def get_random_entryTitle():
+    return re.sub(r"\.md$", "", random.choice(os.listdir("./entries")))
 
 
 def search(title):

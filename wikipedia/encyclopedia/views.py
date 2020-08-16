@@ -14,7 +14,7 @@ def index(request):
 
 def entryPage(request, title):
     entry = util.get_entry(title)
-    if title:
+    if entry:
         return render(
             request,
             "encyclopedia/entryPage.html",
@@ -25,6 +25,11 @@ def entryPage(request, title):
         return render(
             request, "encyclopedia/404.html", {"form": entryForms.SearchForm()}
         )
+
+
+def randomEntryPage(request):
+    print("hello world")
+    return redirect("encyclopedia:entry", title=util.get_random_entryTitle())
 
 
 def searchEntry(request):
