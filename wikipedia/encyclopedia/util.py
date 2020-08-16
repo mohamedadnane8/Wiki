@@ -64,13 +64,7 @@ def search(title):
 
 
 def is_exist(title):
-    _, filenames = default_storage.listdir("entries")
-    for filename in filenames:
-        if filename.endswith(".md"):
-            filename = re.sub(r"\.md$", "", filename)
-            if filename == title:
-                return True
-    return False
+    return default_storage.exists(f"entries/{title}.md")
 
 
 def save(title, text):
