@@ -9,12 +9,12 @@
 
 {% endblock %}
 {% block body %}
-    <h2>Create a new page:</h2>
+    <h2>Edit {{title}}:</h2>
     <hr>
-      <form action="{% url 'encyclopedia:' %}" method="post"  class="container">
+      <form action="{% url 'encyclopedia:edit' title=title %}" method="post"  class="container">
           {% csrf_token %}
           {{ createform }}
-          <input type="submit">
+          <input type="submit" value="Edit">
       </form>
 
 {% endblock %}

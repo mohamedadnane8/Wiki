@@ -62,7 +62,6 @@ def create(request):
         if form.is_valid():
             title = form.cleaned_data["title"]
             content = form.cleaned_data["content"]
-            print("ATTTENENNTJDJJSJJD]n]n]\n\n\n\n\n\n\n\n\n")
             print(title)
             if util.is_exist(title):
                 return render(
@@ -78,16 +77,33 @@ def create(request):
 
 
 def edit(request, title):
-    if request.method == "post":
-        pass
+    # in case a post request was sent.
+    # we will save the file once again and redirect to the entry page.
+    print("\n\n\n yeess mmmeennn")
+
+    if request.method == "POST":
+        form = entryForms.CreateForm(request.POST)
+
+        if form.is_valid():
+            print(title)
+
+            new_content = form.cleaned_data["content"]
+            new_title = form.cleaned_data["title"]
+
+            util.edit(title, new_title, new_content)
+            return redirect("encyclopedia:entry", title=new_title)
+
+    # this is not post request, so we will render the page.
     entry = util.get_entry(title)
     if title:
+        form = entryForms.CreateForm()
+        form = entryForms.CreateForm({"content": entry, "title": title,})
         return render(
             request,
             "encyclopedia/edit.html",
             {
                 "form": entryForms.SearchForm(),
-                "createform": entryForms.CreateForm(),
+                "createform": form,
                 "title": title,
                 "entry": entry,
             },

@@ -1,5 +1,5 @@
 import re
-
+import os
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
@@ -77,3 +77,10 @@ def save(title, text):
     # This can be used  for saving and
     f = default_storage.open(f"entries/{title}.md", "wb")
     f.write(text.encode("utf-8"))
+
+
+def edit(old_title, title, text):
+    # This can be used  for saving and
+    f = default_storage.open(f"entries/{old_title}.md", "wb")
+    f.write(text.encode("utf-8"))
+    os.rename(f"entries/{old_title}.md", f"entries/{title}.md")
