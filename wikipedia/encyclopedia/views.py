@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from . import util, entryForms
+import markdown2
 
 
 def index(request):
@@ -14,21 +15,23 @@ def index(request):
 
 def entryPage(request, title):
     entry = util.get_entry(title)
-    if entry:
+    if util.is_exist(title):
         return render(
             request,
             "encyclopedia/entryPage.html",
-            {"entry": entry, "title": title, "form": entryForms.SearchForm()},
+            {
+                "entry": markdown2.markdown(entry),
+                "title": title,
+                "form": entryForms.SearchForm(),
+            },
         )
     else:
-        # TODO : have to fix  this later
         return render(
             request, "encyclopedia/404.html", {"form": entryForms.SearchForm()}
         )
 
 
 def randomEntryPage(request):
-    print("hello world")
     return redirect("encyclopedia:entry", title=util.get_random_entryTitle())
 
 
@@ -41,7 +44,6 @@ def searchEntry(request):
             keyWord = form.cleaned_data["search"]
 
             is_entry, ans = util.search(keyWord)
-            print(is_entry)
             if is_entry:
                 return redirect("encyclopedia:entry", title=keyWord)
             else:
@@ -67,7 +69,6 @@ def create(request):
         if form.is_valid():
             title = form.cleaned_data["title"]
             content = form.cleaned_data["content"]
-            print(title)
             if util.is_exist(title):
                 return render(
                     request, "encyclopedia/404.html", {"form": entryForms.SearchForm()}
@@ -84,14 +85,11 @@ def create(request):
 def edit(request, title):
     # in case a post request was sent.
     # we will save the file once again and redirect to the entry page.
-    print("\n\n\n yeess mmmeennn")
 
     if request.method == "POST":
         form = entryForms.CreateForm(request.POST)
 
         if form.is_valid():
-            print(title)
-
             new_content = form.cleaned_data["content"]
             new_title = form.cleaned_data["title"]
 

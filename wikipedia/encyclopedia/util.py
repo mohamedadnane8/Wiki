@@ -1,8 +1,6 @@
-import re
-import os
+import re, os, random
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-import random, markdown2
 
 
 def list_entries():
@@ -38,12 +36,15 @@ def get_entry(title):
     """
     try:
         f = default_storage.open(f"entries/{title}.md")
-        return markdown2.markdown(f.read().decode("utf-8"))
+        return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
 
 
 def get_random_entryTitle():
+    """
+    This function returns a  title of a random entry
+    """
     return re.sub(r"\.md$", "", random.choice(os.listdir("./entries")))
 
 
@@ -69,17 +70,24 @@ def search(title):
 
 
 def is_exist(title):
+    """
+    This wrapper function checks if the file exist or not
+    """
     return default_storage.exists(f"entries/{title}.md")
 
 
 def save(title, text):
-    # This can be used  for saving and
+    """
+    This function is used to save the file.
+    """
     f = default_storage.open(f"entries/{title}.md", "wb")
     f.write(text.encode("utf-8"))
 
 
 def edit(old_title, title, text):
-    # This can be used  for saving and
+    """
+    As it's name implies this function is useful to if we want to edit an entry.
+    """
     f = default_storage.open(f"entries/{old_title}.md", "wb")
     f.write(text.encode("utf-8"))
     os.rename(f"entries/{old_title}.md", f"entries/{title}.md")
